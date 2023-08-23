@@ -317,8 +317,11 @@ def get_params_and_headers(params):
     params = params or {}
     hapikey = CONFIG['hapikey']
     if hapikey is None:
-        if CONFIG['token_expires'] is None or CONFIG['token_expires'] < datetime.datetime.utcnow():
-            acquire_access_token_from_refresh_token()
+        if CONFIG['token_expires'] != 'never':
+            is_expired = CONFIG['token_expires'] is None or CONFIG['token_expires'] < datetime.datetime.utcnow()
+            if is_expired:
+                acquire_access_token_from_refresh_token()
+
         headers = {'Authorization': 'Bearer {}'.format(CONFIG['access_token'])}
     else:
         params['hapikey'] = hapikey
@@ -1275,12 +1278,7 @@ def get_request_timeout():
     return request_timeout
 
 def main_impl():
-    args = utils.parse_args(
-        ["redirect_uri",
-         "client_id",
-         "client_secret",
-         "refresh_token",
-         "start_date"])
+    args = utils.parse_args(["start_date"])
 
     CONFIG.update(args.config)
     STATE = {}

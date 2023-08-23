@@ -32,6 +32,10 @@ To run `tap-hubspot` with the configuration file, use this command:
 › tap-hubspot -c my-config.json
 ```
 
+## Private App Authentication
+
+In order to use a [HubSpot Private App](https://developers.hubspot.com/docs/api/private-apps), you may specify your
+`access_token` directly and set `"token_expires": "never"`.
 
 ## API Key Authentication (for development)
 
